@@ -14,11 +14,11 @@ from app.data.db import get_quotes, create_quote
 from app.fsm import QuoteCreateForm
 
 
-# Усі обробники варто закріплювати за Router або Dispatcher
+
 router = Router()
 
 
-# Обробник для команди /start
+
 @router.message(Command("start"))
 @router.message(Command("menu"))
 async def command_start_handler(message: Message) -> None:
@@ -51,7 +51,7 @@ async def back_handler(callback: CallbackQuery) -> None:
 
 @router.message(Command(commands=["cancel"]))
 @router.message(F.text.lower() == "відміна")
-@router.message(F.text == "Cancel creating quote")
+@router.message(F.text == "Відмінна додавання цитати")
 async def cmd_cancel(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
@@ -62,10 +62,7 @@ async def cmd_cancel(message: Message, state: FSMContext):
 @router.message(Command("new_quote"))
 @router.message(F.text == "Додати нову цитату")
 async def create_quote_command(message: Message, state: FSMContext) -> None:
-    # очистити кінцевий автомат на випадок, якщо він не був завершений коректно
     await state.clear()
-
-    # починаємо кінцевий автомат з першого стану (State)
     await state.set_state(QuoteCreateForm.quote)
     await message.answer(text="Напишіть свою цитату",
                          reply_markup=cancel_states_keyboard())
@@ -73,10 +70,8 @@ async def create_quote_command(message: Message, state: FSMContext) -> None:
 
 @router.message(QuoteCreateForm.quote)
 async def proces_quote(message: Message, state: FSMContext) -> None:
-    # збеігаемо попереднє значення quote
     data = await state.update_data(quote=message.text)
     print(data)
-    # змінюємо стан на наступний
     await state.set_state(QuoteCreateForm.author)
     await message.answer("Хто автор цитати?",
                          reply_markup=cancel_states_keyboard())

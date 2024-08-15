@@ -9,7 +9,7 @@ def main_menu_keyboard():
     return markup
 
 
-# Inline клавіатура для списку цитат
+
 def build_quotes_keyboard(quotes: list):
     builder = InlineKeyboardBuilder()
     for index, quot in enumerate(quotes):
