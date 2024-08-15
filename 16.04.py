@@ -26,7 +26,6 @@ async def main() -> None:
     # Додаемо "меню" з власнимим командами
     await bot.set_my_commands(commands=[
         types.BotCommand(command="/start", description="Старт бот"),
-        types.BotCommand(command="/menu", description="Main menu"),
         types.BotCommand(command="/random_quotes", description="Рандомна цитата"),
         types.BotCommand(command="/new_quote", description="Нова цитата"),
         types.BotCommand(command="/cancel", description="Відміна додавання цитати")
